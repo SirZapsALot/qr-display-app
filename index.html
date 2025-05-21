@@ -1,33 +1,116 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>QR Code Generator</title>
   <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#4CAF50">
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 1rem;
+      background-color: #f9f9f9;
+      color: #333;
+      text-align: center;
+    }
+
+    h2 {
+      margin-top: 1rem;
+      font-size: 1.8rem;
+      color: #4CAF50;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      max-width: 400px;
+      font-size: 1.2rem;
+      padding: 0.8rem;
+      margin: 1rem auto;
+      border: 1px solid #ccc;
+      border-radius: 0.5rem;
+      box-sizing: border-box;
+    }
+
+    button {
+      padding: 0.8rem 1.5rem;
+      font-size: 1.1rem;
+      border: none;
+      background-color: #4CAF50;
+      color: white;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      margin-top: 0.5rem;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    #qrcode {
+      margin-top: 2rem;
+    }
+
+    #qrcode img {
+      width: 100%;
+      max-width: 256px;
+    }
+
+    #download {
+      display: none;
+      font-size: 1rem;
+      margin-top: 1rem;
+      color: #007BFF;
+      text-decoration: none;
+    }
+
+    #download:hover {
+      text-decoration: underline;
+    }
+
+    footer {
+      margin-top: 2rem;
+      font-size: 0.9rem;
+      color: #888;
+    }
+  </style>
 </head>
-<body style="text-align: center; font-family: sans-serif; padding: 2rem;">
+<body>
   <h2>QR Code Generator</h2>
-  <input id="text" type="text" placeholder="Enter text" size="40">
-  <button onclick="generateQR()">Generate</button>
-  <div id="qrcode" style="margin-top:20px;"></div>
-  <a id="download" download="qr.png" style="display:none; margin-top:10px;">Download QR Code</a>
+  <input id="text" type="text" placeholder="Enter your message here">
+  <button onclick="generateQR()">Generate QR Code</button>
 
-<script>
-  function generateQR() {
-    const text = document.getElementById('text').value.trim();
-    if (!text) return;
+  <div id="qrcode"></div>
+  <a id="download" download="qr-code.png">Download QR Code</a>
 
-    const encodedText = encodeURIComponent(text);
-    const displayUrl = `https://sirzapsalot.github.io/qr-display-app/display.html?text=${encodedText}`;
+  <footer>Scan to open your text on any device</footer>
 
-    QRCode.toDataURL(displayUrl, { width: 256, margin: 2 }, function (err, url) {
-      document.getElementById('qrcode').innerHTML = `<img src="${url}" alt="QR Code">`;
+  <script>
+    function generateQR() {
+      const text = document.getElementById('text').value.trim();
+      if (!text) return;
 
-      const downloadLink = document.getElementById('download');
-      downloadLink.href = url;
-      downloadLink.style.display = 'inline-block';
-      downloadLink.textContent = 'Download QR Code';
-    });
-  }
-</script>
+      const encodedText = encodeURIComponent(text);
+      const displayUrl = `https://sirzapsalot.github.io/qr-display-app/display.html?text=${encodedText}`;
+
+      QRCode.toDataURL(displayUrl, { width: 256, margin: 2 }, function (err, url) {
+        if (err) return console.error(err);
+
+        document.getElementById('qrcode').innerHTML = `<img src="${url}" alt="QR Code">`;
+
+        const downloadLink = document.getElementById('download');
+        downloadLink.href = url;
+        downloadLink.style.display = 'block';
+      });
+    }
+
+    // Register service worker (optional for PWA)
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js')
+        .then(reg => console.log("Service Worker registered"))
+        .catch(err => console.error("Service Worker error", err));
+    }
+  </script>
 </body>
 </html>
