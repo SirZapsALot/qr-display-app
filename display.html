@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>QR Display</title>
+  <style>
+    body { font-family: sans-serif; padding: 2rem; text-align: center; font-size: 1.5rem; }
+  </style>
+</head>
+<body>
+  <div id="output">Loading...</div>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const text = params.get("text");
+    document.getElementById("output").innerText = decodeURIComponent(text || "No text provided.");
+  </script>
+</body>
+</html>
