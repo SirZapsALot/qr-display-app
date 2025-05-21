@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>QR Code Generator</title>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+</head>
+<body style="text-align: center; font-family: sans-serif; padding: 2rem;">
+  <h2>QR Code Generator</h2>
+  <input id="text" type="text" placeholder="Enter text" size="40">
+  <button onclick="generateQR()">Generate</button>
+  <div id="qrcode" style="margin-top:20px;"></div>
+  <a id="download" download="qr.png" style="display:none; margin-top:10px;">Download QR Code</a>
+
+<script>
+  function generateQR() {
+    const text = document.getElementById('text').value.trim();
+    if (!text) return;
+
+    const encodedText = encodeURIComponent(text);
+    const displayUrl = `https://sirzapsalot.github.io/qr-display-app/display.html?text=${encodedText}`;
+
+    QRCode.toDataURL(displayUrl, { width: 256, margin: 2 }, function (err, url) {
+      document.getElementById('qrcode').innerHTML = `<img src="${url}" alt="QR Code">`;
+
+      const downloadLink = document.getElementById('download');
+      downloadLink.href = url;
+      downloadLink.style.display = 'inline-block';
+      downloadLink.textContent = 'Download QR Code';
+    });
+  }
+</script>
+</body>
+</html>
