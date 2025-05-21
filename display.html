@@ -1,58 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QR Code Generator</title>
-  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+  <title>QR Display</title>
   <style>
-    body {
-      font-family: sans-serif;
-      text-align: center;
-      padding: 2rem;
-      margin: 0;
-    }
-    input, button {
-      font-size: 1.2rem;
-      padding: 0.5rem;
-      margin-top: 1rem;
-      width: 90%;
-      max-width: 400px;
-    }
-    #qrcode {
-      margin-top: 2rem;
-    }
-    a {
-      display: block;
-      margin-top: 1rem;
-      font-size: 1rem;
-    }
+    body { font-family: sans-serif; padding: 2rem; text-align: center; font-size: 1.5rem; }
   </style>
 </head>
 <body>
-  <h2>QR Code Generator</h2>
-  <input id="text" type="text" placeholder="Enter your message">
-  <button onclick="generateQR()">Generate QR</button>
-
-  <div id="qrcode"></div>
-  <a id="download" download="qr.png" style="display:none;">Download QR Code</a>
-
+  <div id="output">Loading...</div>
   <script>
-    function generateQR() {
-      const text = document.getElementById('text').value.trim();
-      if (!text) return;
-
-      const encodedText = encodeURIComponent(text);
-      const displayUrl = `https://sirzapsalot.github.io/qr-display-app/display.html?text=${encodedText}`;
-
-      QRCode.toDataURL(displayUrl, { width: 256, margin: 2 }, function (err, url) {
-        document.getElementById('qrcode').innerHTML = `<img src="${url}" alt="QR Code">`;
-
-        const downloadLink = document.getElementById('download');
-        downloadLink.href = url;
-        downloadLink.style.display = 'block';
-        downloadLink.textContent = 'Download QR Code';
-      });
-    }
+    const params = new URLSearchParams(window.location.search);
+    const text = params.get("text");
+    document.getElementById("output").innerText = decodeURIComponent(text || "No text provided.");
   </script>
 </body>
 </html>
